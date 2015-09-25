@@ -1,0 +1,40 @@
+.contents {
+  margin: 0px 0px 0px 0px;
+  color: darkblue;
+}
+.app_header {
+  margin: 30px 0px 0px 0px;
+}
+.container-fluid {
+  margin: 10px;
+  padding: 3px;
+  color: #337;
+}
+
+table, td {
+  padding: 1px;
+}
+
+th {
+  padding: 4px;
+}
+
+.table-container {
+  width: 960px;
+}
+
+.btn_edit {
+  font-size: 14px;
+}
+
+.btn_delete {
+  font-size: 14px;
+}
+
+.alignRight {
+  text-align: right;
+}
+
+.alignCenter {
+  text-align: center;
+}

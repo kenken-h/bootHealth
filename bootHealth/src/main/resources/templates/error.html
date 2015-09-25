@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragment/frag01 :: htmlhead"
+  th:with="title=#{app.title}"></head>
+<style>
+.contents {
+  margin: 80px;
+}
+
+table, td, th {
+  padding: 10px;
+}
+</style>
+<body>
+  <div th:include="fragment/frag01 :: navbar"
+    th:with="title=#{app.title}"></div>
+
+  <div class="contents">
+    <div class="container">
+      <!-- $$$ Body $$$$$$$$$$$$$$$$$$$$$$$$$$$  -->
+
+      <div class="row">
+        <div class="col-lg-12">
+          <h3 th:text="#{err.msg}">error message</h3>
+          <hr />
+          <div th:include="fragment/frag01 :: footer"
+            th:with="title=#{app.footer}"></div>
+
+        </div>
+      </div>
+      <!-- $$$ Body $$$$$$$$$$$$$$$$$$$$$$$$$$$  -->
+    </div>
+  </div>
+
+</body>
+</html>

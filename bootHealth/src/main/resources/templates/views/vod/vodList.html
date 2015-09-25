@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragment/frag01 :: htmlhead"
+  th:with="title=#{app.title}, navColorCss='navBarRed01'"></head>
+
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script th:src="@{/common/js/chart.js}"></script>
+<script th:src="@{/os/js/nanobar.js}"></script>
+<script th:src="@{/common/js/dndImport.js}"></script>
+<script>
+  importUrl = "importVital";
+</script>
+<script th:inline="javascript">
+  //var oStat = [[${statCmd}]];
+  //importUrl = oStat.importUrl;
+</script>
+<body th:object="${statCmd}">
+  <!-- コンテナ SSSSSSSSSS -->
+  <div class="container-fluid">
+
+    <!-- ページ・ヘッダ ＋　ナビゲーションバー -->
+    <div th:include="fragment/frag01 :: vodListHeader"
+      th:with="pageTitle=#{vod.list.title}, excelUrl='/exportVodExcel(type=0)',
+              pdfUrl='/exportVodPdf(type=0)'"></div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <ul class="pager" th:unless="*{#lists.isEmpty(vods)}">
+          <!-- 前ボタン -->
+          <li th:if="*{prev=='不可'}" class="previous disabled"><a
+            href="#">&larr; 前</a></li>
+          <li th:if="*{prev=='可'}" class="previous"><a
+            id="prev-week" href="#" th:href="@{/prevPage(type=0)}">&larr;
+              前</a></li>
+          <!-- チャートボタン -->
+          <li><button id="vodButton" type="button"
+              class="btn btn-default">バイタル一覧</button></li>
+          <li><button id="bsButton" type="button"
+              class="btn btn-danger">血糖値</button></li>
+          <Li><button id="bpButton" type="button"
+              class="btn btn-warning">血圧</button></Li>
+          <li><button id="btButton" type="button"
+              class="btn btn-info">体温</button></li>
+          <li><button id="wtButton" type="button"
+              class="btn btn-success">体重</button></li>
+          <!-- 次ボタン -->
+          <li th:if="*{next=='不可'}" class="next disabled"><a
+            href="#">次 &rarr;</a></li>
+          <li th:if="*{next=='可'}" class="next"><a id="next-week"
+            href="#" th:href="@{/nextPage(type=0)}">次 &rarr;</a></li>
+        </ul>
+
+        <!-- $$$$$ タブ・ナビゲーション $$$$$ -->
+        <ul class="nav nav-tabs nav-inside-tabs" id="chartTab"
+          hidden="true">
+          <li><a href="#tabVod" data-toggle="tab" id="btnVod">バイタル一覧</a></li>
+          <li><a href="#tabVChart" data-toggle="tab" id="btnVChart">チャート</a></li>
+        </ul>
+
+        <!-- $$$$$ タブ・ペイン $$$$$ -->
+        <div class="tab-content">
+          <!-- SSSSS(( バイタル一覧 ))SSSSS -->
+          <div role="tabpanel" class="tab-pane active" id="tabVod">
+
+            <div id="dropArea">
+              <table id="dtTable" th:if="*{#lists.isEmpty(vods)}">
+                <tr>
+                  <td>バイタルのデータが登録されていません</td>
+                </tr>
+                <tr>
+                  <td>インポートする場合はここにエクセルファイルをドロップしてください</td>
+                </tr>
+              </table>
+              <table class="table table-condensed" id="dtTable"
+                th:unless="*{#lists.isEmpty(vods)}">
+                <tr>
+                  <td>種別</td>
+                  <td th:each="vm : *{vms}">
+                    <p th:text="${vm.name}" class="text-primary"
+                      align="center">種別</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td>記入時間</td>
+                  <td th:each="vm : *{vms}">
+                    <p th:text="${vm.jikan}" class="text-primary"
+                      align="center">測定時間</p>
+                  </td>
+                </tr>
+                <tr th:each="vod: *{vods}">
+                  <td th:text="${vod.sokuteiBi}" class="text-success"
+                    align="center">測定日</td>
+                  <td th:each="vt: ${vod.vitals}" align="right"><span
+                    th:if="${vt.sokuteiTi} lt ${vt.vitalM.kijunMax}"
+                    th:text="${#numbers.formatDecimal(vt.sokuteiTi,1,2)}">測定値</span>
+                    <span
+                    th:if="${vt.sokuteiTi} >= ${vt.vitalM.kijunMax}"
+                    th:text="${#numbers.formatDecimal(vt.sokuteiTi,1,2)}"
+                    class="text-danger">測定値</span></td>
+                </tr>
+              </table>
+            </div>
+
+          </div>
+          <!-- EEEEE(( バイタル一覧 ))EEEEE -->
+
+          <!-- SSSSS(( チャート ))SSSSS -->
+          <div role="tabpanel" class="tab-pane" id="tabVChart">
+            <div id="chart_div" style="width: 1100px; height: 460px;"></div>
+          </div>
+          <!-- EEEEE(( チャート ))EEEEE -->
+
+        </div>
+        <br />
+
+        <!-- フッタ SSSSSSSSSS  -->
+        <hr />
+        <div th:include="fragment/frag01 :: footer"
+          th:with="title=#{app.footer}"></div>
+
+      </div>
+    </div>
+    <!-- コンテンツ EEEEEEEEEEE  -->
+
+  </div>
+  <!-- コンテナ EEEEEEEEEE -->
+
+  <!-- モーダル・フラグメント -->
+  <div
+    th:with="nestFrag='chart-area',modalFooter='chart-modal-no-footer',modalLg='true'"
+    th:include="fragment/fragModal :: create-modal"></div>
+
+</body>
+</html>

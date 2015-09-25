@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragment/frag01 :: htmlhead"
+  th:with="title=#{app.title}"></head>
+
+<body>
+  <!-- コンテナ SSSSSSSSSS -->
+  <div class="container-fluid">
+
+    <!-- ページ・ヘッダ ＋　ナビゲーションバー -->
+    <div th:include="fragment/frag01 :: pageHeader"
+      th:with="pageTitle=#{home.title}, noBtn='1'"></div>
+
+    <!-- コンテンツ SSSSSSSSSSSSSSSS -->
+    <div class="row">
+      <div class="col-md-12">
+        <span style="font-size: 20px; color: #A22;">
+        これは、Spring Boot + Thymeleaf + Bootstrap
+        <br />
+        で開発したデモアプリケーションです。</span>
+      </div>
+    </div>
+    <br /><br />
+    <div class="row">
+      <div class="col-md-6">
+
+        <span>開発環境：</span>
+        <ul>
+          <li>OSX 10.10.5, JDK1.8, Eclipse Mars, MySQL5.6.17, Maven 3.1.1</li>
+          <li>Spring Boot1.2.3, Thymeleaf2.1.4, Bootstrap3.3.2, jQuery1.11.1,
+            dataTables1.10.4, EclipseLink2.5.0</li>
+        </ul>
+        <span>実行環境：</span>
+        <ul>
+          <li>サーバー　　(Macbook pro)：OSX 10.10.5, JVM1.8,
+            MySQL5.6.17</li>
+          <li>クライアント(Macbook pro)：OSX 10.10.5, Safari8.0.8</li>
+          <li>クライアント( iPad2 )：iOS9, Safari9.0</li>
+        </ul>
+
+      </div>
+      <div class="col-md-6">
+
+        <span>Spring Boot Actuator を使ってサーバーの状態を表示：</span>
+        <ul>
+          <li><a th:href="@{beans}" target="_blank">コンテナに登録されているビーンの一覧</a></li>
+          <li><a th:href="@{env}" target="_blank">プロパティ一覧（ConfigurableEnvironment）</a></li>
+          <li><a th:href="@{configprops}" target="_blank">プロパティ一覧（@ConfigurationProperties）</a></li>
+          <li><a th:href="@{mappings}" target="_blank">マッピング情報</a></li>
+          <li><a th:href="@{metrics}" target="_blank">アプリケーションのメトリックス情報</a></li>
+          <li><a th:href="@{trace}" target="_blank">トレース情報</a></li>
+          <li><a th:href="@{autoconfig}" target="_blank">自動設定の候補</a></li>
+          <li><a th:href="@{dump}" target="_blank">スレッド・ダンプ</a></li>
+          <li><a th:href="@{health}" target="_blank">サーバーのヘルスチェック</a></li>
+        </ul>
+
+      </div>
+    </div>
+    <!-- コンテンツ EEEEEEEEEEEEEEEE -->
+
+  </div>
+  <!-- コンテナ EEEEEEEEEE -->
+
+</body>
+</html>

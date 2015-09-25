@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:th="http://www.thymeleaf.org">
+<!-- HTMLヘッダ -->
+<head th:fragment="htmlhead">
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title th:text="${title}">(title)</title>
+
+<!-- CSS -->
+<link rel="stylesheet" th:href="@{/os/css/bootstrap.css}"
+  href="//netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" />
+<link th:if="${verDataTables}" rel="stylesheet"
+  th:href="@{/os/css/jquery.dataTables.css}"
+  href="//cdn.datatables.net/1.10.4/css/jquery.dataTables.css" />
+<link rel="stylesheet" th:href="@{/css/app_base.css}" />
+<link rel="stylesheet" th:href="@{/css/navBarRed01.css}" />
+
+<!-- HTML5 shim, IE6-8 で HTML5 要素をサポートする -->
+<!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+<!-- JavaScript : jquery, bootstrap, custom -->
+<script th:src="@{/os/js/jquery-1.11.1.min.js}"
+  src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script th:src="@{/os/js/bootstrap.min.js}"
+  src="//netdna.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<script th:if="${verDataTables}" th:src="@{/os/js/jquery.dataTables.js}"
+  src="//cdn.datatables.net/1.10.4/js/jquery.dataTables.js"></script>
+</head>
+<link rel="stylesheet"
+  th:href="@{/css/{navCss}.css(navCss=${navColorCss})}" />
+
+<body>
+
+  <!-- $$$$$ ナビゲーション・バー -->
+  <div th:fragment="navbar">
+    <nav class="navbar navbar-default navbar-fixed-top"
+      role="navigation">
+      <div class="navbar-header">
+        <a class="navbar-brand" th:href="@{/}"> <span
+          th:text="${title}">(title)</span> <!-- セキュリティ：ログインユーザー情報
+        <span> : <small sec:authentication="name">Bob</small>
+        <small sec:authorize="hasRole('ROLE_ADMIN')">(管理者)</small></span>
+        -->
+        </a>
+      </div>
+      <!-- menu -->
+      <div class="collapse navbar-collapse navbar-ex1-collapse">
+        <ul class="nav navbar-nav navbar-left">
+          <!-- menu1 -->
+          <li><a href="#" th:text="${about}">About</a></li>
+          <!-- menu2 -->
+          <li><a target="_blank"
+            href="https://www.google.com/calendar">カレンダー</a></li>
+          <!-- menu3 -->
+          <li class="dropdown"><a href="#" class="dropdown-toggle"
+            data-toggle="dropdown"> お薬手帳 <b class="caret"></b></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="#" th:href="@{/user/userForm}">個人カルテ</a></li>
+              <li class="divider"></li>
+              <li><a href="#">処方箋</a></li>
+            </ul></li>
+          <!-- menu4 -->
+          <li class="dropdown"><a href="#" class="dropdown-toggle"
+            data-toggle="dropdown"> バイタル管理 <b class="caret"></b>
+          </a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="#" th:href="@{/vodList(type=0)}">バイタル一覧</a></li>
+              <li><a href="#" th:href="@{/updateVod(type=0)}">バイタルチェック</a></li>
+            </ul></li>
+          <!-- menu4 -->
+          <li class="dropdown"><a href="#" class="dropdown-toggle"
+            data-toggle="dropdown"> 血液検査 <b class="caret"></b></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="#" th:href="@{/vodList(type=1)}">血液検査一覧</a></li>
+              <li><a href="#" th:href="@{/updateVod(type=1)}">検査値入力</a></li>
+            </ul></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <!-- menu5 -->
+          <li class="dropdown"><a href="#" class="dropdown-toggle"
+            data-toggle="dropdown"> 保守 <b class="caret"></b></a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="#" th:href="@{/admin/userList}">ユーザー一覧</a></li>
+              <li><a href="#" th:href="@{/admin/kusuriMstList}">薬マスター一覧</a></li>
+              <li class="divider"></li>
+              <li><a href="#" th:href="@{/vitalMstList(type=0)}">バイタルマスター一覧</a></li>
+              <li><a href="#" th:href="@{/vitalMstList(type=1)}">血液検査マスター一覧</a></li>
+            </ul></li>
+          <!-- menu5 : test -->
+          <!-- logout -->
+          <li><form th:action="@{/logout}" method="post"
+              class="navbar-form">
+              <button type="submit" class="btn btn-default btn-sm">ログアウト</button>
+            </form></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+  <!-- %%%%% ナビゲーション・バー -->
+
+  <!-- $$$$$ フッター -->
+  <div th:fragment="footer">
+    <footer>
+      <p>
+        &copy; <span th:text="${title}">(title)</span>
+      </p>
+    </footer>
+  </div>
+  <!-- %%%%% フッター -->
+
+  <!-- $$$$$ ページヘッダ -->
+  <div th:fragment="pageHeader">
+    <div class="row">
+      <div class="col-md-12 app_header">
+        <!-- ナビゲーション -->
+        <div th:include="fragment/frag01 :: navbar"
+          th:with="title=#{app.title}"></div>
+        <!-- タイトル -->
+        <br /> <span class="col-md-3" style="font-size: 22px;"
+          th:utext="${pageTitle}">タイトル</span>
+        <!-- ボタン -->
+        <div class="btn-group col-md-3" role="group"
+          th:unless="${noBtn}">
+          <button id="btn-create" class="btn btn-primary btn-sm">
+            <span class="glyphicon glyphicon-plus"></span> 追加
+          </button>
+          <a href="#" th:href="@{__${excelUrl}__}"
+            class="btn btn-default btn-sm" role="button"> <span
+            class="glyphicon glyphicon-export"></span> Excel
+          </a> <a href="#" target="_blank" th:href="@{__${pdfUrl}__}"
+            class="btn btn-default btn-sm" role="button"> <span
+            class="glyphicon glyphicon-export"></span> PDF
+          </a>
+        </div>
+        <!-- 
+              <div id="errMsg" class="col-md-6" style="font-size: 16px;">
+              </div>
+         -->
+      </div>
+    </div>
+    <hr />
+  </div>
+  <!-- %%%%% ページヘッダ -->
+
+  <!-- $$$$$ ページヘッダ（VodList） -->
+  <div th:fragment="vodListHeader">
+    <div class="row">
+      <div class="col-md-12 app_header">
+        <!-- ナビゲーション -->
+        <div th:include="fragment/frag01 :: navbar"
+          th:with="title=#{app.title}"></div>
+        <!-- タイトル -->
+        <br /> <span class="col-md-4" style="font-size: 22px;"
+          th:utext="${pageTitle}">タイトル</span>
+        <!-- ボタン -->
+        <div class="btn-group col-md-2">
+          <a href="#" th:href="@{__${excelUrl}__}"
+            class="btn btn-default btn-sm" role="button"> <span
+            class="glyphicon glyphicon-export"></span> Excel
+          </a> <a href="#" target="_blank" th:href="@{__${pdfUrl}__}"
+            class="btn btn-default btn-sm" role="button"> <span
+            class="glyphicon glyphicon-export"></span> PDF
+          </a>
+        </div>
+        <!-- エラーメッセージ -->
+        <div id="errMsg" class="col-md-6" style="font-size: 16px;">
+        </div>
+      </div>
+    </div>
+    <hr />
+  </div>
+  <!-- %%%%% ページヘッダ（VodList） -->
+
+  <!-- $$$$$ ページヘッダ（VodForm） -->
+  <div th:fragment="vodFormHeader">
+    <div class="row">
+      <div class="col-md-12 app_header">
+        <!-- ナビゲーション -->
+        <div th:include="fragment/frag01 :: navbar"
+          th:with="title=#{app.title}"></div>
+        <!-- タイトル -->
+        <br /> <span class="col-md-4" style="font-size: 22px;"
+          th:utext="${pageTitle}">タイトル</span>
+        <!-- ボタン -->
+        <div class="col-md-2">
+          <button id="btn-save" class="btn btn-primary btn-sm">
+            <span class="glyphicon glyphicon-save"></span> 保存
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- %%%%% ページヘッダ（VodForm） -->
+
+  <!-- $$$$$ フォーム・グループ（ボタン付き） -->
+  <div th:fragment="textFormGroup">
+    <div class="form-group">
+      <label class="col-md-2 control-label" th:for="${fgId}"
+        th:text="${fgLabel}">ラベル</label>
+      <div class="controls" th:classappend="${fgCol}">
+        <input th:type="${fgType}" th:field="*{__${fgId}__}"
+          th:placeholder="${fgLabel}" th:errorclass="fieldError"
+          th:maxlength="${fgLen}" class="form-control" /> <span
+          th:if="${#fields.hasErrors('__${fgId}__')}"
+          th:errors="*{__${fgId}__}">不正な入力</span>
+      </div>
+      <a th:if="${fgTel}" href="#"
+        class="btn btn-danger btn-sm col-md-1" onclick="callPhone(this)"
+        th:id="${fgId}">電話</a> <a th:if="${fgSearch}" href="#"
+        class="btn btn-success btn-sm col-md-1" target="_blank"
+        th:name="${fgId}" th:id="btnSearch">検索</a> <a th:if="${fgRoute}"
+        href="#" th:href="@{/gTransit}"
+        class="btn btn-success btn-sm col-md-1" th:name="${fgId}"
+        th:id="btnTransit">ルート</a>
+      <button th:if="${fgZip}" type="button"
+        class="btn btn-success btn-sm col-md-1" id="btnZip">参照</button>
+    </div>
+  </div>
+  <!-- %%%%% フォーム・グループ -->
+
+  <!-- $$$$$ フォーム・グループ（モーダル） -->
+  <div th:fragment="modalTextFormGroup">
+    <div class="form-group">
+      <label class="col-sm-3 control-label" th:for="${fgId}"
+        th:text="${fgLabel}">ラベル</label>
+      <div class="col-sm-8 controls">
+        <input th:type="${fgType}" th:field="*{__${fgId}__}"
+          th:placeholder="${fgLabel}" th:errorclass="fieldError"
+          th:maxlength="${fgLen}" class="form-control" /> <span
+          th:if="${#fields.hasErrors('__${fgId}__')}"
+          th:errors="*{__${fgId}__}">不正な入力</span>
+      </div>
+    </div>
+  </div>
+  <!-- %%%%% フォーム・グループ（モーダル） -->
+
+</body>
+</html>

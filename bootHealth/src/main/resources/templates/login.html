@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragment/frag01 :: htmlhead"
+  th:with="title=#{app.title}"></head>
+<style>
+.contents {
+  margin: 30px;
+}
+
+table, td, th {
+  padding: 10px;
+}
+</style>
+<script type="text/javascript">
+  jQuery(function($) {
+    $('#username').focus();
+  });
+</script>
+<body>
+  <div class="contents">
+    <div class="container">
+
+      <!-- $$$ Body $$$$$$$$$$$$$$$$$$$$$$$$$$$  -->
+      <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+          <div th:if="${param.error}" class="alert alert-error">ユーザー名またはパスワードが不正です.</div>
+          <div th:if="${param.logout}" class="alert alert-success">ログアウトしています.</div>
+          <h4 th:utext="#{login.msg}">ログイン・メッセージ</h4>
+          <form name="f" th:action="@{/login}" method="post"
+            th:object="${user}" class="form-horizontal" role="form"
+            style="width: 800px; margin: 0 auto;">
+            <fieldset>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="username">ユーザー名</label>
+                <div class="col-sm-4 controls">
+                  <input type="text" id="username" name="username" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="pass">パスワード</label>
+                <div class="col-sm-4 controls">
+                  <input type="password" id="password" name="password" />
+                </div>
+              </div>
+            </fieldset>
+            <br />
+            <div class="form-actions">
+              <button type="submit" class="btn btn-default">ログイン</button>
+            </div>
+          </form>
+          <hr />
+          <div th:include="fragment/frag01 :: footer"
+            th:with="title=#{app.footer}"></div>
+        </div>
+      </div>
+      <!-- $$$ Body $$$$$$$$$$$$$$$$$$$$$$$$$$$  -->
+
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:th="http://www.thymeleaf.org">
+<body>
+
+  <!-- %%%%% Bootstrap3 モーダル内のフォーム・フラグメント %%%%% -->
+
+  <!-- $$$$$ ユーザーフォーム -->
+  <div th:fragment="user-form">
+    <form class="form-horizontal" role="form" action="#"
+      th:action="@{/admin/saveUser}" th:object="${formCmd}"
+      method="post" id="modalForm">
+      <input hidden="true" type="text" th:field="*{id}" id="id" /> <input
+        hidden="true" type="text" th:field="*{version}" id="version" />
+      <input hidden="true" type="text" id="status"
+        th:field="${statCmd.status}" />
+      <fieldset>
+        <div th:include="fragment/frag01 :: modalTextFormGroup"
+          th:with="fgLabel='ユーザー名', fgId='name', 
+          fgType='text', fgLen='12'"></div>
+        <div th:include="fragment/frag01 :: modalTextFormGroup"
+          th:with="fgLabel='氏名', fgId='simei', 
+          fgType='text', fgLen='20'"></div>
+        <div th:include="fragment/frag01 :: modalTextFormGroup"
+          th:with="fgLabel='よみ', fgId='yomi', 
+          fgType='text', fgLen='20'"></div>
+
+        <div class="form-group">
+          <label class="col-sm-3 control-label" for="pass">ロール</label>
+          <div class="col-sm-8 controls" id="roles">
+            管理者 <input type="checkbox" th:field="*{roleList}"
+              value="ROLE_ADMIN" id="ROLE_ADMIN" /> ユーザー <input
+              type="checkbox" th:field="*{roleList}" value="ROLE_USER"
+              id="ROLE_USER" />
+          </div>
+        </div>
+      </fieldset>
+      <ul>
+        <li th:each="err : ${#fields.errors('*')}" th:text="${err}" />
+      </ul>
+    </form>
+
+  </div>
+  <!-- %%%%% ユーザーフォーム -->
+
+  <!-- $$$$$ バイタルマスターフォーム -->
+  <div th:fragment="vm-form">
+    <form class="form-horizontal" role="form" action="#"
+      th:action="@{/admin/saveVM}" th:object="${formCmd}" method="post"
+      id="modalForm">
+      <input hidden="true" type="text" th:field="*{id}" id="id" /> <input
+        hidden="true" type="text" th:field="*{version}" id="version" />
+      <fieldset>
+        <div th:include="fragment/frag01 :: modalTextFormGroup"
+          th:with="fgLabel='名称', fgId='name', 
+          fgType='text', fgLen='40'"></div>
+
+        <div class="form-group">
+          <label class="col-sm-3 control-label" th:for="*{type}"
+            th:text="タイプ">ラベル</label>
+          <div class="col-sm-8">
+            <select th:field="*{type}" class="form-control">
+              <option th:each="vtype : ${vmTypes}"
+                th:attrif="*{type==vtype} ? selected='selected'"
+                th:value="${vtype}" th:text="${vtype}">hoge</option>
+            </select>
+          </div>
+        </div>
+
+        <div th:include="fragment/frag01 :: modalTextFormGroup"
+          th:with="fgLabel='順序', fgId='junjo', 
+          fgType='number', fgLen='3'"></div>
+
+        <div th:include="fragment/frag01 :: modalTextFormGroup"
+          th:with="fgLabel='測定時間', fgId='jikan', 
+          fgType='text', fgLen='20'"></div>
+        <div th:include="fragment/frag01 :: modalTextFormGroup"
+          th:with="fgLabel='基準値最小', fgId='kijunMin', 
+          fgType='number', fgLen='5'"></div>
+        <div th:include="fragment/frag01 :: modalTextFormGroup"
+          th:with="fgLabel='基準値最大', fgId='kijunMax', 
+          fgType='number', fgLen='5'"></div>
+
+        
+      </fieldset>
+    </form>
+    <div class="col-sm-8 col-sm-offset-3" id="errMsg"></div>
+  </div>
+  <!-- %%%%% バイタルマスターフォーム -->
+
+  <!-- $$$$$ 薬マスターフォーム -->
+  <div th:fragment="km-form">
+    <form class="form-horizontal" role="form" action="#"
+      th:action="@{/admin/saveKM}" th:object="${formCmd}" method="post"
+      id="modalForm">
+      <input hidden="true" type="text" th:field="*{id}" id="id" /> <input
+        hidden="true" type="text" th:field="*{version}" id="version" />
+
+      <fieldset>
+        <div th:include="fragment/frag01 :: modalTextFormGroup"
+          th:with="fgLabel='薬品名', fgId='name', 
+          fgType='text', fgLen='20'"></div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label" for="name">説明</label>
+          <div class="col-sm-8 controls">
+            <textarea rows="8" th:field="*{setumei}" placeholder="説明"
+              id="setumei" th:errorclass="fieldError" maxlength="800"
+              class="form-control"></textarea>
+            <span th:if="${#fields.hasErrors('setumei')}"
+              th:errors="*{setumei}">不正な入力</span>
+          </div>
+        </div>
+        <div th:include="fragment/frag01 :: modalTextFormGroup"
+          th:with="fgLabel='ジェネリック変更前', fgId='generic', 
+            fgType='text', fgLen='20'"></div>
+
+      </fieldset>
+    </form>
+  </div>
+  <!-- %%%%% 薬マスターフォーム -->
+
+  <!-- $$$$$ チャート表示エリア -->
+  <div th:fragment="chart-area">
+    <div id="chart_div" style="width: 940px; height: 520px;"></div>
+  </div>
+
+</body>
+</html>

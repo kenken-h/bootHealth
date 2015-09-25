@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!-- $$$$$ モーダル -->
+<div th:fragment="create-modal">
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+    aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" th:classappend="${modalLg} ? modal-lg : modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h3 class="modal-title" id="myModalLabel">タイトル</h3>
+        </div>
+        <div class="modal-body">
+          <div th:include="fragment/fragModalBody :: ${nestFrag}"></div>
+        </div>
+        <div th:include="fragment/fragModal :: ${modalFooter}"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- %%%%% モーダル -->
+
+<!-- $$$$$ フォーム・モーダルのフッター -->
+<div th:fragment="form-modal-footer">
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal" id="btnCancel">取消</button>
+          <button type="button" class="btn btn-primary" id="btnSave">保存</button>
+        </div>
+</div>
+
+<!-- $$$$$ チャート・モーダルのフッター -->
+<div th:fragment="chart-modal-footer">
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">閉じる</button>
+        </div>
+</div>
+
+<!-- $$$$$ チャート・モーダルのフッター -->
+<div th:fragment="chart-modal-no-footer">
+</div>
+
+</body>
+</html>

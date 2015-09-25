@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragment/frag01 :: htmlhead"
+  th:with="title=#{app.title}"></head>
+
+<link th:href="@{/css/os/datepicker.css}" type="text/css"
+  rel="stylesheet" />
+<script th:src="@{/os/js/bootstrap-datepicker.js}"></script>
+<!-- 日本語対応用スクリプト -->
+<script th:src="@{/os/js/bootstrap-datepicker.ja.js}"></script>
+<script th:src="@{/js/userForm.js}"></script>
+<style>
+.list-group {
+  max-height: 400px;
+  overflow-y: auto;
+}
+</style>
+<body>
+  <!-- コンテナ SSSSSSSSSS -->
+  <div class="container-fluid">
+
+    <!-- $$$ Body $$$$$$$$$$$$$$$$$$$$  -->
+    <div class="row">
+      <div class="col-md-12 app_header">
+        <!-- ナビゲーション -->
+        <div th:include="fragment/frag01 :: navbar"
+          th:with="title=#{app.title}"></div>
+        <!-- タイトル -->
+        <br /> <span class="col-md-3" style="font-size: 22px;"
+          th:utext="#{user.form.title}">ユーザー入力・タイトル</span>
+        <!-- ボタン -->
+        <div class="col-md-3">
+          <button type="submit" class="btn btn-primary btn-sm"
+            id="btnSave">
+            <span class="glyphicon glyphicon-save"></span>保存
+          </button>
+          <button type="button" class="btn btn-default btn-sm"
+            id="btnCancel">取消</button>
+        </div>
+        <!-- メッセージ -->
+        <div th:text="${statCmd.message}" class="col-md-6">メッセージ</div>
+        <input hidden="true" type="text" id="status"
+          th:value="${statCmd.status}" />
+      </div>
+    </div>
+    <br />
+
+    <div class="row">
+      <div class="col-md-12">
+        <form class="form-horizontal" role="form" action="#"
+          id="user-form" th:action="@{/user/userForm}"
+          th:object="${formCmd}" method="post">
+          <fieldset>
+            <!-- ユーザー情報：隠しフィールド -->
+            <input hidden="true" type="text" th:field="*{id}" id="id" />
+            <input hidden="true" type="text" th:field="*{pass}"
+              id="pass" /> <input hidden="true" type="text"
+              th:field="*{version}" id="version" /> <input
+              hidden="true" type="text" th:field="*{roles}" id="roles" />
+
+            <!-- $$$ TAB $$$$$$$$$$$$$$$$$$$$ -->
+            <div>
+              <!-- %%%%% タブ・ナビゲーション %%%%% -->
+              <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active"><a
+                  href="#kojin" aria-controls="kojin" role="tab"
+                  data-toggle="tab">個人情報</a></li>
+                <li role="presentation"><a href="#jusyo"
+                  aria-controls="jusyo" role="tab" data-toggle="tab">住所・電話</a></li>
+                <li role="presentation"><a href="#byoreki"
+                  aria-controls="byoreki" role="tab" data-toggle="tab">病歴など</a></li>
+                <li role="presentation"><a href="#yakkyoku"
+                  aria-controls="yakkyoku" role="tab" data-toggle="tab">薬局</a></li>
+                <li role="presentation"><a href="#byoin"
+                  aria-controls="byoin" role="tab" data-toggle="tab">病院</a></li>
+              </ul>
+
+              <!-- %%%%% タブ・ペイン %%%%% -->
+              <div class="tab-content">
+
+                <!-- (( 個人情報 )) -->
+                <div role="tabpanel" class="tab-pane" id="kojin">
+                  <br />
+                  <div th:include="fragment/frag01 :: textFormGroup"
+                    th:with="fgLabel='ユーザー名', fgId='name', 
+                        fgType='text', fgCol='col-md-4', fgLen='12'"></div>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="name">パスワード</label>
+                    <div class="col-md-4 controls">
+                      <input type="password" th:field="*{ipass}"
+                        placeholder="パスワードの変更"
+                        th:errorclass="fieldError" maxlength="13"
+                        class="form-control" /> <span
+                        th:if="${#fields.hasErrors('ipass')}"
+                        th:errors="*{ipass}">不正な入力</span>
+                    </div>
+                  </div>
+                  <div th:include="fragment/frag01 :: textFormGroup"
+                    th:with="fgLabel='氏名', fgId='simei', 
+                        fgType='text', fgCol='col-md-4', fgLen='20'"></div>
+                  <div th:include="fragment/frag01 :: textFormGroup"
+                    th:with="fgLabel='よみ', fgId='yomi', 
+                        fgType='text', fgCol='col-md-4', fgLen='20'"></div>
+
+                  <!-- datepicker: http://kwski.net/jquery/1041/ -->
+                  <div class="form-group">
+                    <label class="col-md-2 control-label"
+                      for="seinenGappi">生年月日</label>
+                    <div class="col-md-2 controls">
+                      <input type="text" th:field="*{seinenGappi}"
+                        placeholder="生年月日" th:errorclass="fieldError"
+                        maxlength="13" class="form-control" /> <span
+                        th:if="${#fields.hasErrors('seinenGappi')}"
+                        th:errors="*{seinenGappi}">不正な入力</span>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="seiBetu">性別</label>
+                    <div class="col-md-2 controls">
+                      <input type="text" th:field="*{seiBetu}"
+                        placeholder="性別" th:errorclass="fieldError"
+                        maxlength="13" class="form-control" /> <span
+                        th:if="${#fields.hasErrors('seiBetu')}"
+                        th:errors="*{seiBetu}">不正な入力</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- (( 住所・電話 )) -->
+                <div role="tabpanel" class="tab-pane" id="jusyo">
+                  <br />
+                  <div th:include="fragment/frag01 :: textFormGroup"
+                    th:with="fgLabel='電話番号', fgId='telNo', 
+                        fgType='tel', fgCol='col-md-4', fgLen='13'"></div>
+                  <div th:include="fragment/frag01 :: textFormGroup"
+                    th:with="fgLabel='郵便番号', fgId='yubinBango', 
+                        fgType='text', fgCol='col-md-4', fgLen='8', fgZip='1'"></div>
+                  <div th:include="fragment/frag01 :: textFormGroup"
+                    th:with="fgLabel='都道府県', fgId='toDoFuKen', 
+                        fgType='text', fgCol='col-md-4', fgLen='10'"></div>
+                  <div th:include="fragment/frag01 :: textFormGroup"
+                    th:with="fgLabel='市区町村', fgId='siKuTyoSon', 
+                        fgType='text', fgCol='col-md-4', fgLen='40'"></div>
+                  <div th:include="fragment/frag01 :: textFormGroup"
+                    th:with="fgLabel='番地', fgId='banTi', 
+                        fgType='text', fgCol='col-md-4', fgLen='50'"></div>
+                  <div th:include="fragment/frag01 :: textFormGroup"
+                    th:with="fgLabel='建物', fgId='tatemono', 
+                        fgType='text', fgCol='col-md-4', fgLen='50'"></div>
+                </div>
+
+                <!-- (( 病歴 )) -->
+                <div role="tabpanel" class="tab-pane" id="byoreki">
+                  <br />
+
+                  <div class="form-group">
+                    <label class="col-md-2 control-label"
+                      for="ketuekiGata">血液型</label>
+                    <div class="col-md-8">
+                      <label th:each="btype : ${bloodTypes}"
+                        class="radio-inline"><input type="radio"
+                        th:field="*{ketuekiGata}" th:value="${btype}"
+                        th:text="${btype}" /></label>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-md-2 control-label" for="rhGata">Rh型</label>
+                    <div class="col-md-8">
+                      <label th:each="rhtype : ${rhTypes}"
+                        class="radio-inline"><input type="radio"
+                        th:field="*{rhGata}" th:value="${rhtype}"
+                        th:text="${rhtype}" /></label>
+                    </div>
+                  </div>
+                  <div th:include="fragment/frag01 :: textFormGroup"
+                    th:with="fgLabel='副作用歴', fgId='fukuSayouReki', 
+                        fgType='text', fgCol='col-md-7', fgLen='100'"></div>
+                  <div th:include="fragment/frag01 :: textFormGroup"
+                    th:with="fgLabel='アレルギー歴', fgId='allergyReki', 
+                        fgType='text', fgCol='col-md-7', fgLen='100'"></div>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label"
+                      for="byoRekiList">病歴</label>
+                    <div class="col-md-8">
+                      <label th:each="pIll : ${pastIllnesses}"
+                        class="checkbox-inline"><input
+                        type="checkbox" th:field="*{byoRekiList}"
+                        th:value="${pIll}" th:text="${pIll}" /></label>
+                      <!-- 
+                        <label class="checkbox-inline"><input type="checkbox"
+                          th:field="*{byoRekiList}" value="アレルギー性疾患" />アレルギー性疾患
+                        </label> <label class="checkbox-inline"><input type="checkbox"
+                          th:field="*{byoRekiList}" value="肝疾患" />肝疾患 </label>
+                        <label class="checkbox-inline"><input type="checkbox"
+                          th:field="*{byoRekiList}" value="心疾患" />心疾患 </label>
+                        <label class="checkbox-inline"><input type="checkbox"
+                          th:field="*{byoRekiList}" value="腎疾患" />腎疾患 </label>
+                        <label class="checkbox-inline"><input type="checkbox"
+                          th:field="*{byoRekiList}" value="消化器疾患" />消化器疾患
+                        </label> <label class="checkbox-inline"><input type="checkbox"
+                          th:field="*{byoRekiList}" value="糖尿病" />糖尿病 </label>
+                        <label class="checkbox-inline"><input type="checkbox"
+                          th:field="*{byoRekiList}" value="緑内障" />緑内障 </label>
+                          -->
+                    </div>
+                  </div>
+                  <div th:include="fragment/frag01 :: textFormGroup"
+                    th:with="fgLabel='病歴その他', fgId='byoRekiSonota', 
+                        fgType='text', fgCol='col-md-7', fgLen='100'"></div>
+                  <hr />
+                </div>
+
+                <!-- (( 薬局 )) -->
+                <div role="tabpanel" class="tab-pane" id="yakkyoku">
+                  <br />
+                  <div th:include="fragment/frag01 :: textFormGroup"
+                    th:with="fgLabel='薬局', fgId='yakkyoku', 
+                        fgType='text', fgCol='col-md-4', fgLen='40', fgSearch='1'"></div>
+                  <div th:include="fragment/frag01 :: textFormGroup"
+                    th:with="fgLabel='薬局電話番号', fgId='yakkyokuTel', 
+                        fgType='tel', fgCol='col-md-4', fgLen='13', fgTel='1'"></div>
+                </div>
+
+                <!-- (( 病院 )) -->
+                <div role="tabpanel" class="tab-pane" id="byoin">
+                  <br />
+                  <div th:include="fragment/frag01 :: textFormGroup"
+                    th:with="fgLabel='病院名', fgId='byoin1Mei', 
+                        fgType='text', fgCol='col-md-4', fgLen='30', fgSearch='1'"></div>
+                  <div th:include="fragment/frag01 :: textFormGroup"
+                    th:with="fgLabel='予約電話番号', fgId='byoin1YoyakuTel', 
+                        fgType='tel', fgCol='col-md-4', fgLen='13', fgTel='1'"></div>
+                  <div th:include="fragment/frag01 :: textFormGroup"
+                    th:with="fgLabel='病院住所', fgId='byoin1Jusyo', 
+                        fgType='text', fgCol='col-md-4', fgLen='60', fgRoute='1'"></div>
+                  <div th:include="fragment/frag01 :: textFormGroup"
+                    th:with="fgLabel='病院名', fgId='byoin2Mei', 
+                        fgType='text', fgCol='col-md-4', fgLen='30', fgSearch='1'"></div>
+                  <div th:include="fragment/frag01 :: textFormGroup"
+                    th:with="fgLabel='予約電話番号', fgId='byoin2YoyakuTel', 
+                        fgType='tel', fgCol='col-md-4', fgLen='13', fgTel='1'"></div>
+                  <div th:include="fragment/frag01 :: textFormGroup"
+                    th:with="fgLabel='病院住所', fgId='byoin2Jusyo', 
+                        fgType='text', fgCol='col-md-4', fgLen='60', fgRoute='1'"></div>
+                </div>
+              </div>
+            </div>
+            <!-- %%% TAB %%%%%%%%%%%%%%%%%%%% -->
+
+          </fieldset>
+        </form>
+        <hr />
+        <div th:include="fragment/frag01 :: footer"
+          th:with="title=#{app.footer}"></div>
+      </div>
+    </div>
+    <!-- %%% Body %%%%%%%%%%%%%%%%%%%%  -->
+
+  </div>
+  <!-- コンテナ EEEEEEEEEE -->
+  
+<script th:inline="javascript">
+var oUser = [[${formCmd}]];
+var oStat = [[${statCmd}]]
+</script>
+</body>
+</html>
